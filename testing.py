@@ -2,10 +2,10 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 
 # Load the PNG certificate template
-template_image = Image.open("certificate_template.png")
+template_image = Image.open("cert.jpg")
 
 # Define two sample names
-long_name = "Alexander Jonathan Williams Powell The Fucking Thirty Second And More"
+long_name = "Alexander Jonathan Williams Powell The Second"
 short_name = "Emma Smith"
 
 # Define the text color
@@ -18,13 +18,17 @@ middle_line = template_image.height // 2
 
 # Define the Y-axis position for the name text
 # CHANGE THIS ACCORDING TO YOUR NEEDS!!
-y_position = middle_line
+y_position = 800
+chosen_x_margin = 300
+font_size = 120
+# like this
+# y_position = 520 
+
 
 # Define the margins and middle line positions
 margin_50 = 50
 margin_100 = 100
-margin_200 = 200
-
+margin_200 = 220
 
 # Define the font for the guiding lines' labels
 label_font = ImageFont.truetype("arial.ttf", size=20)
@@ -36,14 +40,14 @@ for name in [long_name, short_name]:
     draw = ImageDraw.Draw(certificate_image)
 
     # Calculate the X-axis position to center the text using draw.textlength
-    font_size = 60  # Initial font size
     font = ImageFont.truetype("arial.ttf", font_size)
 
     while True:
         text_width = draw.textlength(name, font=font)
-        if text_width <= certificate_image.width - 2 * margin_100:
+        if text_width <= certificate_image.width - 2 * chosen_x_margin:
             break
         font_size -= 1  # Decrease font size
+        y_position += 1 
         font = ImageFont.truetype("arial.ttf", font_size)
 
     x_position = (certificate_image.width - text_width) / 2
@@ -63,12 +67,12 @@ for name in [long_name, short_name]:
     for margin in [margin_50, margin_100]:
         draw.line([(0, middle_line - margin), (certificate_image.width, middle_line - margin)], fill=(255, 0, 0), width=2)
         draw.line([(0, middle_line + margin), (certificate_image.width, middle_line + margin)], fill=(255, 0, 0), width=2)
-        draw.text((10, middle_line - margin - 20), str(margin), fill=(255, 0, 0), font=label_font)
-        draw.text((10, middle_line + margin + 10), str(margin), fill=(255, 0, 0), font=label_font)
+        draw.text((10, middle_line - margin - 20), str(middle_line - margin - 20), fill=(255, 0, 0), font=label_font)
+        draw.text((10, middle_line + margin + 10), str(middle_line + margin + 10), fill=(255, 0, 0), font=label_font)
 
     # Middle line
     draw.line([(0, middle_line), (certificate_image.width, middle_line)], fill=(255, 0, 0), width=2)
-    draw.text((10, middle_line - 20), str(middle_line-20), fill=(255, 0, 0), font=label_font)
+    draw.text((10, middle_line - 20), str(middle_line - 20) + " (middle)", fill=(255, 0, 0), font=label_font)
 
     # Save the certificate image
     certificate_image.save(os.path.join("testing", f"{name[:20]}.png"))
